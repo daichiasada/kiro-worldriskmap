@@ -1,0 +1,23 @@
+{
+  "version": "v1",
+  "hooks": [
+    {
+      "name": "Typecheck and lint on source save",
+      "trigger": "PostFileSave",
+      "matcher": "src/.*\\.(ts|tsx)$",
+      "action": {
+        "type": "command",
+        "command": "npm run -s lint 2>&1 | tail -30"
+      }
+    },
+    {
+      "name": "Run domain tests when domain logic changes",
+      "trigger": "PostFileSave",
+      "matcher": "src/domain/.*\\.ts$",
+      "action": {
+        "type": "command",
+        "command": "npm run -s test:run -- src/domain 2>&1 | tail -40"
+      }
+    }
+  ]
+}
