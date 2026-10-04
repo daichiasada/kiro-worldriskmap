@@ -13,3 +13,10 @@
 - [x] 11. Playwright E2E とスクリーンショットによる UI 改善
 - [x] 12. 3回のレビュー → Issue 起票 (#1〜#6) → 自律解決
 - [x] 13. ビルド確認・デプロイ設定 (GitHub Pages)
+
+## 追加機能 (Issue #7): 代表国から見た関係性ビュー
+- [x] 14. 関係データ (`src/data/relations.ts`: 代表国リスト + 関係ペア)
+- [x] 15. 関係ドメインロジック (`src/domain/relations.ts`: buildRelations)
+- [x] 16. 単体 + Property-Based Test (relations.test.ts / relations.property.test.ts)
+- [x] 17. 関係性ビュー (`src/views/RelationsView.tsx`) と新タブ
+- [x] 18. Playwright E2E 追加

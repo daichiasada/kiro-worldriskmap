@@ -47,3 +47,15 @@ export const BAND_COLORS: Record<string, string> = {
   high: '#e8590c',
   severe: '#c92a2a',
 };
+
+export const RELATION_LABELS: Record<RelationType, string> = {
+  ally: '同盟',
+  neutral: '中立',
+  rival: '対立',
+};
+
+export const RELATION_COLORS: Record<RelationType, string> = {
+  ally: '#2e8b57',
+  neutral: '#8c98a4',
+  rival: '#c92a2a',
+};

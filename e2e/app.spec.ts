@@ -71,6 +71,24 @@ test.describe('World Geopolitical Risk Map', () => {
     await page.screenshot({ path: 'e2e-shots/04-compare.png', fullPage: true });
   });
 
+  test('関係性タブ(G7等): 起点国から見た関係一覧が表示される (Issue #7)', async ({ page }) => {
+    await page.goto('/');
+    await page.getByRole('tab', { name: /関係性/ }).click();
+    // 起点国を日本に
+    await page.getByLabel('起点となる代表国').selectOption('JPN');
+    const rows = page.getByTestId('relation-row');
+    await expect(rows.first()).toBeVisible();
+    // 起点国(日本)は一覧(テーブル行)に含まれない
+    await expect(rows.filter({ hasText: '日本' })).toHaveCount(0);
+    // 件数は全データ数 - 1 (起点国を除外)
+    expect(await rows.count()).toBeGreaterThan(10);
+    // 関係バッジが存在する(対立/同盟/中立のいずれか)
+    await expect(page.locator('[data-relation]').first()).toBeVisible();
+    // 先頭群は対立(rival)でソートされている
+    await expect(page.locator('[data-relation]').first()).toHaveAttribute('data-relation', 'rival');
+    await page.screenshot({ path: 'e2e-shots/06-relations.png', fullPage: true });
+  });
+
   test('出典タブ: 免責と指標が表示される', async ({ page }) => {
     await page.goto('/');
     await page.getByRole('tab', { name: '出典' }).click();

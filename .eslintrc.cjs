@@ -5,7 +5,14 @@ module.exports = {
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
   ],
-  ignorePatterns: ['dist', 'node_modules', '.eslintrc.cjs', 'playwright.config.ts', 'e2e'],
+  ignorePatterns: [
+    'dist',
+    'node_modules',
+    'infra',
+    '.eslintrc.cjs',
+    'playwright.config.ts',
+    'e2e',
+  ],
   parser: '@typescript-eslint/parser',
   plugins: ['react-refresh'],
   rules: {
