@@ -1,0 +1,90 @@
+<mxfile host="app.diagrams.net" type="device">
+  <diagram name="Architecture" id="wgrm-arch">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="760" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Title -->
+        <mxCell id="title" value="World Geopolitical Risk Map — Architecture" style="text;html=1;fontSize=18;fontStyle=1;align=left;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="40" y="20" width="640" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- Client -->
+        <mxCell id="client" value="User (Web Browser)&#10;EN / JA" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="60" y="90" width="170" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- AWS boundary -->
+        <mxCell id="aws" value="AWS Account (us-east-1)" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;strokeColor=#D79B00;fillColor=none;verticalAlign=top;fontStyle=1;fontSize=13;align=left;spacingLeft=10;spacingTop=6;" vertex="1" parent="1">
+          <mxGeometry x="320" y="80" width="440" height="230" as="geometry" />
+        </mxCell>
+        <mxCell id="cf" value="Amazon CloudFront&#10;(HTTPS redirect, OAC,&#10;SPA 403/404 -&gt; index.html)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="350" y="130" width="180" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="s3" value="Amazon S3 (private)&#10;static site assets&#10;Block Public Access" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="560" y="130" width="170" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="cfn" value="CloudFormation stack: WorldRiskMapStack" style="text;html=1;align=left;fontSize=11;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry x="350" y="250" width="380" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- Frontend app (what is bundled into S3) -->
+        <mxCell id="fe" value="Frontend SPA — React 18 + TypeScript (Vite build)" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;strokeColor=#9673a6;fillColor=none;verticalAlign=top;fontStyle=1;fontSize=13;align=left;spacingLeft=10;spacingTop=6;" vertex="1" parent="1">
+          <mxGeometry x="60" y="360" width="700" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="views" value="Views&#10;Map / Ranking / Relations (G7+) /&#10;Country Detail / Compare / Sources" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="80" y="410" width="200" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="domain" value="Domain layer (pure, React-free)&#10;risk.ts / relations.ts&#10;composite score · bands · bilateral" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="300" y="410" width="220" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="data" value="Data + i18n&#10;countries.ts / relations.ts /&#10;isoNumeric.ts · en/ja messages" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="540" y="410" width="200" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="felabel" value="Property-Based Tests (fast-check) cover domain invariants" style="text;html=1;align=left;fontSize=11;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry x="80" y="515" width="440" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- External CDN -->
+        <mxCell id="cdn" value="world-atlas TopoJSON&#10;(jsDelivr CDN)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="820" y="400" width="180" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- IaC -->
+        <mxCell id="cdk" value="AWS CDK (TypeScript)&#10;infra/ — one-command deploy" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="820" y="120" width="180" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- Kiro dev artifacts -->
+        <mxCell id="kiro" value="Kiro (.kiro/) — Spec · Steering · Hooks · PBT · MCP · Power · Custom Agent" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12;align=left;spacingLeft=10;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="60" y="620" width="700" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Edges -->
+        <mxCell id="e1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;" edge="1" parent="1" source="client" target="cf">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e1l" value="HTTPS" style="text;html=1;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="245" y="110" width="60" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" value="OAC (SigV4)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;fontSize=10;" edge="1" parent="1" source="cf" target="s3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e3" value="deploys" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;dashed=1;fontSize=10;" edge="1" parent="1" source="cdk" target="aws">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e4" value="vite build -&gt; assets" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;dashed=1;fontSize=10;" edge="1" parent="1" source="fe" target="s3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e5" value="fetch map (runtime)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;fontSize=10;" edge="1" parent="1" source="client" target="cdn">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="145" y="740" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

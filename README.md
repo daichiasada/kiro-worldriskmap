@@ -14,6 +14,19 @@ Kiro の 7 つのコア機能を実演することを目的に構築しました
 - 使用した指標の出典と免責の明記
 - **多言語対応(英語[既定] / 日本語の切替、`localStorage` 保存)**
 
+## アーキテクチャ
+
+![Architecture](docs/architecture.png)
+
+編集可能な図は [`docs/architecture.drawio`](docs/architecture.drawio)(draw.io / diagrams.net で開けます)。
+PNG は同梱の `docs/architecture.png`、ベクタは `docs/architecture.svg` です。
+
+- 利用者(ブラウザ)は **CloudFront**(HTTPS 強制・OAC)経由で**非公開 S3** の静的サイトを取得
+- フロントは **React + TypeScript (Vite)** の SPA。ビュー層 / 純粋なドメイン層 / データ+i18n 層に分離
+- 地図ジオメトリは実行時に **world-atlas TopoJSON (CDN)** から取得
+- インフラは **AWS CDK (TypeScript)** でコード化(`infra/`)、CloudFormation スタックとしてデプロイ
+- 開発は Kiro の各機能(`.kiro/`: Spec / Steering / Hooks / PBT / MCP / Power / Custom Agent)で駆動
+
 ## リスクの定量化
 
 合成リスクスコア `R`(0〜100、高いほど高リスク)は、0〜100 に正規化した
