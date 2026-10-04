@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it } from 'vitest';
 import fc from 'fast-check';
 import { compositeRisk, classifyBand, bilateralRisk, clamp } from './risk';
 import { RISK_WEIGHTS } from './constants';
