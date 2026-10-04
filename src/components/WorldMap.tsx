@@ -81,7 +81,14 @@ export function WorldMap({ scored, isoNumericToId, onSelect }: Props) {
         </Geographies>
       </ComposableMap>
       {tip && (
-        <div className="map-tooltip" style={{ left: tip.x + 14, top: tip.y + 14 }} role="tooltip">
+        <div
+          className="map-tooltip"
+          style={{
+            left: Math.min(tip.x + 14, window.innerWidth - 250),
+            top: Math.min(tip.y + 14, window.innerHeight - 90),
+          }}
+          role="tooltip"
+        >
           <strong>{tip.name}</strong>
           合成スコア: {tip.score.toFixed(1)} / 100
           <br />

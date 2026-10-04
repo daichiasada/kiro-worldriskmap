@@ -1,7 +1,9 @@
-import { RISK_COMPONENT_LABELS, RISK_WEIGHTS } from '../domain/constants';
+import { BAND_THRESHOLDS, RISK_COMPONENT_LABELS, RISK_WEIGHTS } from '../domain/constants';
 import type { RiskComponentKey } from '../domain/types';
 
 const KEYS = Object.keys(RISK_WEIGHTS) as RiskComponentKey[];
+const { moderate, high, severe } = BAND_THRESHOLDS;
+const BAND_RANGE_TEXT = `低 (0–${moderate - 1}) / 中 (${moderate}–${high - 1}) / 高 (${high}–${severe - 1}) / 深刻 (${severe}–100)`;
 
 export function SourcesView() {
   return (
@@ -20,9 +22,7 @@ export function SourcesView() {
           </li>
         ))}
       </ul>
-      <p className="muted">
-        リスク区分: 低 (0–24) / 中 (25–49) / 高 (50–74) / 深刻 (75–100)
-      </p>
+      <p className="muted">リスク区分: {BAND_RANGE_TEXT}</p>
 
       <h3>参考にした公開定量化指標</h3>
       <ul className="sources">

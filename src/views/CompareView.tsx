@@ -39,6 +39,7 @@ export function CompareView({ countries }: Props) {
 
   const a = countries.find((c) => c.id === idA)!;
   const b = countries.find((c) => c.id === idB)!;
+  const sameCountry = idA === idB;
   const bilateral = bilateralRisk(a, b, relation);
 
   const options = [...countries].sort((x, y) => x.nameJa.localeCompare(y.nameJa, 'ja'));
@@ -49,14 +50,14 @@ export function CompareView({ countries }: Props) {
         <div className="controls">
           <select value={idA} onChange={(e) => setIdA(e.target.value)} aria-label="国A">
             {options.map((c) => (
-              <option key={c.id} value={c.id}>
+              <option key={c.id} value={c.id} disabled={c.id === idB}>
                 {c.nameJa}
               </option>
             ))}
           </select>
           <select value={idB} onChange={(e) => setIdB(e.target.value)} aria-label="国B">
             {options.map((c) => (
-              <option key={c.id} value={c.id}>
+              <option key={c.id} value={c.id} disabled={c.id === idA}>
                 {c.nameJa}
               </option>
             ))}
@@ -76,12 +77,20 @@ export function CompareView({ countries }: Props) {
 
         <div style={{ textAlign: 'center' }}>
           <div className="muted">2国間地政学リスクスコア (対称)</div>
-          <div className="big-score" style={{ color: riskColor(bilateral) }}>
-            {bilateral.toFixed(1)}
-          </div>
-          <div style={{ marginTop: 6 }}>
-            <BandPill band={classifyBand(bilateral)} />
-          </div>
+          {sameCountry ? (
+            <p className="muted" style={{ margin: '12px 0' }}>
+              異なる2国を選択してください。
+            </p>
+          ) : (
+            <>
+              <div className="big-score" style={{ color: riskColor(bilateral) }}>
+                {bilateral.toFixed(1)}
+              </div>
+              <div style={{ marginTop: 6 }}>
+                <BandPill band={classifyBand(bilateral)} />
+              </div>
+            </>
+          )}
           <p className="muted" style={{ marginTop: 8 }}>
             両国の「対外関係」「紛争・暴力」の平均に関係係数を乗じて算出。国の順序には依存しません。
           </p>

@@ -15,7 +15,7 @@ export function RankingView({ scored, onSelect }: Props) {
   const rows = useMemo(() => {
     const q = query.trim().toLowerCase();
     const filtered = scored.filter(
-      (c) => c.name.toLowerCase().includes(q) || c.nameJa.includes(query.trim()),
+      (c) => c.name.toLowerCase().includes(q) || c.nameJa.toLowerCase().includes(q),
     );
     const sorted = [...filtered].sort((a, b) => (desc ? b.score - a.score : a.score - b.score));
     return sorted;
