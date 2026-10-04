@@ -5,33 +5,22 @@ import { getRelation } from '../data/relations';
 import { RELATION_FACTORS } from '../domain/constants';
 import { BandPill } from '../components/BandPill';
 import { ComponentBars } from '../components/ComponentBars';
+import { useI18n } from '../i18n/I18nContext';
 import { riskColor } from '../components/colorScale';
 
 /** プルダウンの選択肢: 'auto' は2国から自動判定、それ以外は手動上書き */
 type RelationChoice = 'auto' | RelationType;
-
-const RELATION_NAMES: Record<RelationType, string> = {
-  ally: '同盟',
-  neutral: '中立',
-  rival: '対立',
-};
-
-/** 手動上書き肢のラベル(係数と効果を明記) */
-const OVERRIDE_LABELS: Record<RelationType, string> = {
-  ally: `同盟 — リスク×${RELATION_FACTORS.ally}(低減)`,
-  neutral: `中立 — リスク×${RELATION_FACTORS.neutral}`,
-  rival: `対立 — リスク×${RELATION_FACTORS.rival}(増大)`,
-};
 
 interface Props {
   countries: ScoredCountry[];
 }
 
 function CountryColumn({ c }: { c: ScoredCountry }) {
+  const { lang, countryName } = useI18n();
   return (
     <div className="panel">
       <h3 style={{ marginTop: 0 }}>
-        {c.nameJa} <span className="muted">/ {c.name}</span>
+        {countryName(c)} <span className="muted">/ {lang === 'ja' ? c.name : c.nameJa}</span>
       </h3>
       <div className="big-score" style={{ color: riskColor(c.score) }}>
         {c.score.toFixed(1)}
@@ -45,6 +34,7 @@ function CountryColumn({ c }: { c: ScoredCountry }) {
 }
 
 export function CompareView({ countries }: Props) {
+  const { t, lang, countryName } = useI18n();
   const [idA, setIdA] = useState(countries.find((c) => c.id === 'USA')?.id ?? countries[0].id);
   const [idB, setIdB] = useState(countries.find((c) => c.id === 'CHN')?.id ?? countries[1].id);
   // 既定は 'auto'(2国の関係をデータから自動判定)。ユーザーは任意で手動上書きできる。
@@ -60,7 +50,9 @@ export function CompareView({ countries }: Props) {
   const effectiveRelation: RelationType = choice === 'auto' ? autoRelation : choice;
   const bilateral = bilateralRisk(a, b, effectiveRelation);
 
-  const options = [...countries].sort((x, y) => x.nameJa.localeCompare(y.nameJa, 'ja'));
+  const options = [...countries].sort((x, y) =>
+    countryName(x).localeCompare(countryName(y), lang),
+  );
 
   // 国の組を変更したら関係設定を自動判定へリセットする
   const changeA = (id: string) => {
@@ -72,42 +64,47 @@ export function CompareView({ countries }: Props) {
     setChoice('auto');
   };
 
+  const overrideLabels: Record<RelationType, string> = {
+    ally: t.overrideAlly,
+    neutral: t.overrideNeutral,
+    rival: t.overrideRival,
+  };
+
   return (
     <section>
       <div className="panel" style={{ marginBottom: 16 }}>
         <div className="controls">
-          <select value={idA} onChange={(e) => changeA(e.target.value)} aria-label="国A">
+          <select value={idA} onChange={(e) => changeA(e.target.value)} aria-label="A">
             {options.map((c) => (
               <option key={c.id} value={c.id} disabled={c.id === idB}>
-                {c.nameJa}
+                {countryName(c)}
               </option>
             ))}
           </select>
-          <select value={idB} onChange={(e) => changeB(e.target.value)} aria-label="国B">
+          <select value={idB} onChange={(e) => changeB(e.target.value)} aria-label="B">
             {options.map((c) => (
               <option key={c.id} value={c.id} disabled={c.id === idA}>
-                {c.nameJa}
+                {countryName(c)}
               </option>
             ))}
           </select>
           <select
             value={choice}
             onChange={(e) => setChoice(e.target.value as RelationChoice)}
-            aria-label="関係の前提"
-            title="2国間リスクの算出に用いる関係係数。既定は2国から自動判定します。"
+            aria-label={t.relationPremise}
           >
-            <option value="auto">関係: 自動判定({RELATION_NAMES[autoRelation]})</option>
-            <option value="rival">{OVERRIDE_LABELS.rival}</option>
-            <option value="neutral">{OVERRIDE_LABELS.neutral}</option>
-            <option value="ally">{OVERRIDE_LABELS.ally}</option>
+            <option value="auto">{t.relationAuto(t.relations[autoRelation])}</option>
+            <option value="rival">{overrideLabels.rival}</option>
+            <option value="neutral">{overrideLabels.neutral}</option>
+            <option value="ally">{overrideLabels.ally}</option>
           </select>
         </div>
 
         <div style={{ textAlign: 'center' }}>
-          <div className="muted">2国間地政学リスクスコア (対称)</div>
+          <div className="muted">{t.bilateralTitle}</div>
           {sameCountry ? (
             <p className="muted" style={{ margin: '12px 0' }}>
-              異なる2国を選択してください。
+              {t.pickTwo}
             </p>
           ) : (
             <>
@@ -118,16 +115,14 @@ export function CompareView({ countries }: Props) {
                 <BandPill band={classifyBand(bilateral)} />
               </div>
               <p className="muted" style={{ marginTop: 8 }}>
-                適用中の関係:{' '}
-                <strong>{RELATION_NAMES[effectiveRelation]}</strong>
-                (リスク×{RELATION_FACTORS[effectiveRelation]})
-                {choice === 'auto' ? '〔自動判定〕' : '〔手動上書き〕'}
+                {t.appliedRelation} <strong>{t.relations[effectiveRelation]}</strong>
+                {' '}(×{RELATION_FACTORS[effectiveRelation]}){' '}
+                {choice === 'auto' ? t.autoTag : t.manualTag}
               </p>
             </>
           )}
           <p className="muted" style={{ marginTop: 8 }}>
-            両国の「対外関係」「紛争・暴力」の平均に関係係数を乗じて算出します。関係は既定で2国から
-            自動判定され、プルダウンで任意に上書きできます。国の順序には依存しません。
+            {t.compareHint}
           </p>
         </div>
       </div>

@@ -7,19 +7,15 @@ import { CountryDetailView } from './views/CountryDetailView';
 import { CompareView } from './views/CompareView';
 import { RelationsView } from './views/RelationsView';
 import { SourcesView } from './views/SourcesView';
+import { useI18n } from './i18n/I18nContext';
+import type { Lang } from './i18n/messages';
 
 type Tab = 'map' | 'ranking' | 'relations' | 'detail' | 'compare' | 'sources';
 
-const TABS: { id: Tab; label: string }[] = [
-  { id: 'map', label: '世界地図' },
-  { id: 'ranking', label: 'ランキング' },
-  { id: 'relations', label: '関係性 (G7等)' },
-  { id: 'detail', label: '国別詳細' },
-  { id: 'compare', label: '2国間比較' },
-  { id: 'sources', label: '出典' },
-];
+const TAB_IDS: Tab[] = ['map', 'ranking', 'relations', 'detail', 'compare', 'sources'];
 
 export default function App() {
+  const { t, lang, setLang } = useI18n();
   const [tab, setTab] = useState<Tab>('map');
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const scored = useMemo(() => rankCountries(COUNTRIES), []);
@@ -34,30 +30,44 @@ export default function App() {
     if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
     e.preventDefault();
     const dir = e.key === 'ArrowRight' ? 1 : -1;
-    const next = (index + dir + TABS.length) % TABS.length;
-    setTab(TABS[next].id);
-    document.getElementById(`tab-${TABS[next].id}`)?.focus();
+    const next = (index + dir + TAB_IDS.length) % TAB_IDS.length;
+    setTab(TAB_IDS[next]);
+    document.getElementById(`tab-${TAB_IDS[next]}`)?.focus();
   };
 
   return (
     <>
       <header className="site-header">
         <div className="app" style={{ paddingBottom: 0 }}>
-          <h1>🌐 World Geopolitical Risk Map</h1>
-          <p>公開されている定量化指標に基づき、各国・国家間の地政学リスクを可視化します。</p>
-          <nav className="tabs" role="tablist" aria-label="ビュー切り替え">
-            {TABS.map((t, i) => (
+          <div className="header-top">
+            <h1>{t.appTitle}</h1>
+            <div className="lang-switch" role="group" aria-label={t.language}>
+              {(['en', 'ja'] as Lang[]).map((l) => (
+                <button
+                  key={l}
+                  onClick={() => setLang(l)}
+                  aria-pressed={lang === l}
+                  className={lang === l ? 'active' : ''}
+                >
+                  {l === 'en' ? 'EN' : '日本語'}
+                </button>
+              ))}
+            </div>
+          </div>
+          <p>{t.appTagline}</p>
+          <nav className="tabs" role="tablist" aria-label={t.language}>
+            {TAB_IDS.map((id, i) => (
               <button
-                key={t.id}
-                id={`tab-${t.id}`}
+                key={id}
+                id={`tab-${id}`}
                 role="tab"
-                aria-selected={tab === t.id}
+                aria-selected={tab === id}
                 aria-controls="tabpanel"
-                tabIndex={tab === t.id ? 0 : -1}
-                onClick={() => setTab(t.id)}
+                tabIndex={tab === id ? 0 : -1}
+                onClick={() => setTab(id)}
                 onKeyDown={(e) => onTabKeyDown(e, i)}
               >
-                {t.label}
+                {t.tabs[id]}
               </button>
             ))}
           </nav>

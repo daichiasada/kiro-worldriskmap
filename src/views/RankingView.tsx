@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import type { ScoredCountry } from '../domain/types';
 import { BandPill } from '../components/BandPill';
+import { useI18n } from '../i18n/I18nContext';
 import { riskColor } from '../components/colorScale';
 
 interface Props {
@@ -9,6 +10,7 @@ interface Props {
 }
 
 export function RankingView({ scored, onSelect }: Props) {
+  const { t, lang, countryName } = useI18n();
   const [query, setQuery] = useState('');
   const [desc, setDesc] = useState(true);
 
@@ -26,31 +28,31 @@ export function RankingView({ scored, onSelect }: Props) {
       <div className="controls">
         <input
           type="search"
-          placeholder="国名で検索 (例: 日本 / Japan)"
+          placeholder={t.searchPlaceholder}
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          aria-label="国名で検索"
+          aria-label={t.searchPlaceholder}
         />
         <select
           value={desc ? 'desc' : 'asc'}
           onChange={(e) => setDesc(e.target.value === 'desc')}
-          aria-label="並び順"
+          aria-label={t.sortOrder}
         >
-          <option value="desc">リスク高い順</option>
-          <option value="asc">リスク低い順</option>
+          <option value="desc">{t.sortDesc}</option>
+          <option value="asc">{t.sortAsc}</option>
         </select>
         <span className="muted" style={{ alignSelf: 'center' }}>
-          {rows.length} カ国
+          {t.countriesCount(rows.length)}
         </span>
       </div>
       <table className="ranking">
         <thead>
           <tr>
             <th style={{ width: 48 }}>#</th>
-            <th>国</th>
-            <th>地域</th>
-            <th style={{ width: 90 }}>スコア</th>
-            <th style={{ width: 80 }}>リスク</th>
+            <th>{t.colCountry}</th>
+            <th>{t.region}</th>
+            <th style={{ width: 90 }}>{t.score}</th>
+            <th style={{ width: 80 }}>{t.risk}</th>
           </tr>
         </thead>
         <tbody>
@@ -58,7 +60,8 @@ export function RankingView({ scored, onSelect }: Props) {
             <tr key={c.id} onClick={() => onSelect(c.id)} data-testid="rank-row">
               <td className="muted">{i + 1}</td>
               <td>
-                {c.nameJa} <span className="muted">/ {c.name}</span>
+                {countryName(c)}{' '}
+                <span className="muted">/ {lang === 'ja' ? c.name : c.nameJa}</span>
               </td>
               <td className="muted">{c.region}</td>
               <td className="score-cell" style={{ color: riskColor(c.score) }}>

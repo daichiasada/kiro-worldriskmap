@@ -2,9 +2,10 @@ import { useMemo, useState } from 'react';
 import type { ScoredCountry } from '../domain/types';
 import { buildRelations } from '../domain/relations';
 import { REPRESENTATIVE_COUNTRY_IDS } from '../data/relations';
-import { RELATION_COLORS, RELATION_LABELS } from '../domain/constants';
+import { RELATION_COLORS } from '../domain/constants';
 import { COUNTRIES } from '../data/countries';
 import { BandPill } from '../components/BandPill';
+import { useI18n } from '../i18n/I18nContext';
 import { riskColor } from '../components/colorScale';
 
 interface Props {
@@ -13,12 +14,13 @@ interface Props {
 }
 
 export function RelationsView({ scored, onSelect }: Props) {
+  const { t, lang, countryName } = useI18n();
   const representatives = useMemo(
     () =>
       REPRESENTATIVE_COUNTRY_IDS.map((id) => COUNTRIES.find((c) => c.id === id)!).sort((a, b) =>
-        a.nameJa.localeCompare(b.nameJa, 'ja'),
+        (lang === 'ja' ? a.nameJa : a.name).localeCompare(lang === 'ja' ? b.nameJa : b.name, lang),
       ),
-    [],
+    [lang],
   );
 
   const [sourceId, setSourceId] = useState('JPN');
@@ -38,32 +40,36 @@ export function RelationsView({ scored, onSelect }: Props) {
       <div className="panel" style={{ marginBottom: 16 }}>
         <div className="controls">
           <label htmlFor="source-select" style={{ alignSelf: 'center' }}>
-            起点国:
+            {t.sourceCountry}:
           </label>
           <select
             id="source-select"
             value={sourceId}
             onChange={(e) => setSourceId(e.target.value)}
-            aria-label="起点となる代表国"
+            aria-label={t.sourceCountry}
           >
             {representatives.map((c) => (
               <option key={c.id} value={c.id}>
-                {c.nameJa} / {c.name}
+                {countryName(c)}
               </option>
             ))}
           </select>
           <span className="muted" style={{ alignSelf: 'center' }}>
-            {sourceScored.nameJa} の合成リスク {sourceScored.score.toFixed(1)}{' '}
+            {countryName(sourceScored)} {t.score} {sourceScored.score.toFixed(1)}{' '}
             <BandPill band={sourceScored.band} />
           </span>
         </div>
 
         <p className="muted" style={{ margin: '4px 0 10px' }}>
-          <strong>{source.nameJa}</strong> から見た各国との関係性です。関係区分(
-          <span style={{ color: RELATION_COLORS.rival }}>■</span>対立 {counts.rival} /
-          <span style={{ color: RELATION_COLORS.neutral }}> ■</span>中立 {counts.neutral} /
-          <span style={{ color: RELATION_COLORS.ally }}> ■</span>同盟 {counts.ally})ごとに、
-          二国間地政学リスクスコアの高い順で並べています。
+          {t.relationsIntroPrefix}
+          <strong>{countryName(source)}</strong>
+          {t.relationsIntroSuffix}{' '}
+          (<span style={{ color: RELATION_COLORS.rival }}>■</span>
+          {t.relations.rival} {counts.rival} /
+          <span style={{ color: RELATION_COLORS.neutral }}> ■</span>
+          {t.relations.neutral} {counts.neutral} /
+          <span style={{ color: RELATION_COLORS.ally }}> ■</span>
+          {t.relations.ally} {counts.ally})
         </p>
       </div>
 
@@ -71,11 +77,11 @@ export function RelationsView({ scored, onSelect }: Props) {
         <table className="ranking">
           <thead>
             <tr>
-              <th>相手国</th>
-              <th>地域</th>
-              <th style={{ width: 90 }}>関係</th>
-              <th style={{ width: 120 }}>二国間リスク</th>
-              <th style={{ width: 110 }}>相手国スコア</th>
+              <th>{t.colRelationTarget}</th>
+              <th>{t.region}</th>
+              <th style={{ width: 90 }}>{t.colRelation}</th>
+              <th style={{ width: 120 }}>{t.colBilateral}</th>
+              <th style={{ width: 110 }}>{t.colTargetScore}</th>
             </tr>
           </thead>
           <tbody>
@@ -86,7 +92,8 @@ export function RelationsView({ scored, onSelect }: Props) {
                 onClick={() => onSelect(e.country.id)}
               >
                 <td>
-                  {e.country.nameJa} <span className="muted">/ {e.country.name}</span>
+                  {countryName(e.country)}{' '}
+                  <span className="muted">/ {lang === 'ja' ? e.country.name : e.country.nameJa}</span>
                 </td>
                 <td className="muted">{e.country.region}</td>
                 <td>
@@ -95,7 +102,7 @@ export function RelationsView({ scored, onSelect }: Props) {
                     style={{ background: RELATION_COLORS[e.relation] }}
                     data-relation={e.relation}
                   >
-                    {RELATION_LABELS[e.relation]}
+                    {t.relations[e.relation]}
                   </span>
                 </td>
                 <td className="score-cell" style={{ color: riskColor(e.bilateral) }}>
@@ -111,9 +118,7 @@ export function RelationsView({ scored, onSelect }: Props) {
       </div>
 
       <p className="muted" style={{ marginTop: 12 }}>
-        関係区分(同盟/中立/対立)は一般に知られる同盟・対立の構図を参考にした教育目的の分類であり、
-        公式な外交評価ではありません。二国間リスクは両国の「対外関係」「紛争・暴力」の平均に関係係数を
-        乗じた対称スコアです。行をクリックすると相手国の詳細を開きます。
+        {t.relationsFootnote}
       </p>
     </section>
   );

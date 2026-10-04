@@ -43,6 +43,36 @@ header.site-header h1 {
   font-size: 24px;
 }
 
+.header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.lang-switch {
+  display: inline-flex;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.lang-switch button {
+  background: var(--panel);
+  color: var(--text-dim);
+  border: none;
+  padding: 6px 12px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.lang-switch button.active {
+  background: var(--accent);
+  color: #04121f;
+  font-weight: 700;
+}
+
 header.site-header p {
   margin: 0;
   color: var(--text-dim);

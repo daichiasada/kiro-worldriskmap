@@ -2,9 +2,10 @@ import { useMemo, useState } from 'react';
 import { geoCentroid } from 'd3-geo';
 import { ComposableMap, Geographies, Geography, Line } from 'react-simple-maps';
 import type { ScoredCountry } from '../domain/types';
-import { BAND_LABELS, RELATION_COLORS, RELATION_LABELS } from '../domain/constants';
+import { RELATION_COLORS } from '../domain/constants';
 import { getRelation } from '../data/relations';
 import { bilateralRisk } from '../domain/risk';
+import { useI18n } from '../i18n/I18nContext';
 import { riskColor } from './colorScale';
 
 // world-atlas 110m TopoJSON (ISO numeric id を持つ)
@@ -39,6 +40,7 @@ export function WorldMap({
   sourceId,
   lineTargetIds = [],
 }: Props) {
+  const { t, countryName } = useI18n();
   const [tip, setTip] = useState<Tooltip | null>(null);
   const byId = useMemo(() => new Map(scored.map((c) => [c.id, c])), [scored]);
   const source = sourceId ? byId.get(sourceId) : undefined;
@@ -67,18 +69,18 @@ export function WorldMap({
       const rel = getRelation(sourceId!, id);
       const bi = bilateralRisk(source, country, rel);
       return [
-        country.nameJa,
-        `${source.nameJa} との関係: ${RELATION_LABELS[rel]}`,
-        `二国間リスク: ${bi.toFixed(1)} / 100`,
+        countryName(country),
+        `${countryName(source)} / ${t.colRelation}: ${t.relations[rel]}`,
+        `${t.colBilateral}: ${bi.toFixed(1)} ${t.outOf100}`,
       ];
     }
     if (mode === 'relations' && id === sourceId) {
-      return [country.nameJa, '起点国'];
+      return [countryName(country), t.originCountry];
     }
     return [
-      country.nameJa,
-      `合成スコア: ${country.score.toFixed(1)} / 100`,
-      `リスク: ${BAND_LABELS[country.band]}`,
+      countryName(country),
+      `${t.score}: ${country.score.toFixed(1)} ${t.outOf100}`,
+      `${t.risk}: ${t.bands[country.band]}`,
     ];
   };
 
