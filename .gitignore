@@ -8,3 +8,5 @@ playwright-report/
 test-results/
 .vite/
 *.log
+e2e-shots/
+semantic-review/
