@@ -20,3 +20,10 @@
 - [x] 16. 単体 + Property-Based Test (relations.test.ts / relations.property.test.ts)
 - [x] 17. 関係性ビュー (`src/views/RelationsView.tsx`) と新タブ
 - [x] 18. Playwright E2E 追加
+
+## 追加機能 (Issue #9): 世界地図の2国間関係オーバーレイ
+- [x] 19. WorldMap に mode('risk'|'relations') と sourceId / lineTargetIds を追加
+- [x] 20. geoCentroid で重心を算出し関係線 (Line) を描画
+- [x] 21. 色分け・ツールチップ・凡例を mode で分岐
+- [x] 22. MapView に表示モード切替と起点国セレクタを追加
+- [x] 23. Playwright E2E を追加

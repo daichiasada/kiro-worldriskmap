@@ -10,6 +10,27 @@ test.describe('World Geopolitical Risk Map', () => {
     await page.screenshot({ path: 'e2e-shots/01-map.png', fullPage: true });
   });
 
+  test('世界地図: 関係モードに切り替えると関係オーバーレイと起点国セレクタが出る (Issue #9)', async ({
+    page,
+  }) => {
+    await page.goto('/');
+    await expect(page.locator('svg path').first()).toBeVisible({ timeout: 15000 });
+    // 既定はリスクモード、起点国セレクタは出ていない
+    await expect(page.getByLabel('起点となる代表国')).toHaveCount(0);
+    // 関係モードへ
+    await page.getByLabel('地図の表示モード').selectOption('relations');
+    await expect(page.getByLabel('起点となる代表国')).toBeVisible();
+    await expect(page.getByLabel('関係凡例')).toBeVisible();
+    // 関係線 (react-simple-maps の Line = .rsm-line) が複数描画される
+    await expect(page.locator('.rsm-line').first()).toBeVisible({ timeout: 15000 });
+    expect(await page.locator('.rsm-line').count()).toBeGreaterThan(1);
+    await page.screenshot({ path: 'e2e-shots/07-map-relations.png', fullPage: true });
+    // リスクモードに戻すと起点国セレクタが消える
+    await page.getByLabel('地図の表示モード').selectOption('risk');
+    await expect(page.getByLabel('起点となる代表国')).toHaveCount(0);
+    await expect(page.getByLabel('リスク凡例')).toBeVisible();
+  });
+
   test('ランキングタブ: 検索とソートが機能する', async ({ page }) => {
     await page.goto('/');
     await page.getByRole('tab', { name: 'ランキング' }).click();
