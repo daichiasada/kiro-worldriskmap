@@ -64,11 +64,32 @@ test.describe('World Geopolitical Risk Map', () => {
     );
   });
 
-  test('2国間比較タブ: スコアが表示される', async ({ page }) => {
+  test('2国間比較タブ: スコアと関係自動判定が表示される (Issue #8)', async ({ page }) => {
     await page.goto('/');
     await page.getByRole('tab', { name: '2国間比較' }).click();
     await expect(page.getByText('2国間地政学リスクスコア (対称)')).toBeVisible();
+    // 既定は米×中 → 関係は自動判定で「対立」
+    const relSelect = page.getByLabel('関係の前提');
+    await expect(relSelect).toHaveValue('auto');
+    // 自動判定の option ラベルに「対立」が含まれる
+    await expect(relSelect.locator('option[value="auto"]')).toContainText('自動判定(対立)');
+    await expect(page.getByText(/適用中の関係:/)).toBeVisible();
+    await expect(page.getByText(/〔自動判定〕/)).toBeVisible();
+    // 手動上書き(同盟)に変更するとラベルが手動に変わる
+    await relSelect.selectOption('ally');
+    await expect(page.getByText(/〔手動上書き〕/)).toBeVisible();
     await page.screenshot({ path: 'e2e-shots/04-compare.png', fullPage: true });
+  });
+
+  test('2国間比較: 国を変えると関係が自動判定にリセットされる (Issue #8)', async ({ page }) => {
+    await page.goto('/');
+    await page.getByRole('tab', { name: '2国間比較' }).click();
+    const relSelect = page.getByLabel('関係の前提');
+    await relSelect.selectOption('neutral');
+    await expect(relSelect).toHaveValue('neutral');
+    // 国Aを変更 → auto にリセット
+    await page.getByLabel('国A').selectOption('JPN');
+    await expect(relSelect).toHaveValue('auto');
   });
 
   test('関係性タブ(G7等): 起点国から見た関係一覧が表示される (Issue #7)', async ({ page }) => {
