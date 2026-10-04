@@ -19,14 +19,17 @@
         <mxCell id="aws" value="AWS Account (us-east-1)" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;strokeColor=#D79B00;fillColor=none;verticalAlign=top;fontStyle=1;fontSize=13;align=left;spacingLeft=10;spacingTop=6;" vertex="1" parent="1">
           <mxGeometry x="320" y="80" width="440" height="230" as="geometry" />
         </mxCell>
-        <mxCell id="cf" value="Amazon CloudFront&#10;(HTTPS redirect, OAC,&#10;SPA 403/404 -&gt; index.html)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=12;" vertex="1" parent="1">
-          <mxGeometry x="350" y="130" width="180" height="90" as="geometry" />
+        <mxCell id="cf" value="Amazon CloudFront&#10;HTTPS redirect, OAC,&#10;SPA 403/404 -&gt; index.html" style="sketch=0;points=[[0,0,0],[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0,0],[0,1,0],[0.25,1,0],[0.5,1,0],[0.75,1,0],[1,1,0],[0,0.25,0],[0,0.5,0],[0,0.75,0],[1,0.25,0],[1,0.5,0],[1,0.75,0]];outlineConnect=0;fontColor=#232F3E;gradientColor=#4D72F3;gradientDirection=north;fillColor=#3334B9;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.cloudfront;" vertex="1" parent="1">
+          <mxGeometry x="365" y="130" width="78" height="78" as="geometry" />
         </mxCell>
-        <mxCell id="s3" value="Amazon S3 (private)&#10;static site assets&#10;Block Public Access" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=12;" vertex="1" parent="1">
-          <mxGeometry x="560" y="130" width="170" height="90" as="geometry" />
+        <mxCell id="s3" value="Amazon S3 (private)&#10;static site assets&#10;Block Public Access" style="sketch=0;points=[[0,0,0],[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0,0],[0,1,0],[0.25,1,0],[0.5,1,0],[0.75,1,0],[1,1,0],[0,0.25,0],[0,0.5,0],[0,0.75,0],[1,0.25,0],[1,0.5,0],[1,0.75,0]];outlineConnect=0;fontColor=#232F3E;gradientColor=#60A337;gradientDirection=north;fillColor=#277116;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.s3;" vertex="1" parent="1">
+          <mxGeometry x="600" y="130" width="78" height="78" as="geometry" />
+        </mxCell>
+        <mxCell id="cfnicon" value="" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=#F34482;gradientDirection=north;fillColor=#BC1356;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.cloudformation;" vertex="1" parent="1">
+          <mxGeometry x="470" y="248" width="34" height="34" as="geometry" />
         </mxCell>
         <mxCell id="cfn" value="CloudFormation stack: WorldRiskMapStack" style="text;html=1;align=left;fontSize=11;fontStyle=2;" vertex="1" parent="1">
-          <mxGeometry x="350" y="250" width="380" height="20" as="geometry" />
+          <mxGeometry x="512" y="255" width="300" height="20" as="geometry" />
         </mxCell>
 
         <!-- Frontend app (what is bundled into S3) -->
