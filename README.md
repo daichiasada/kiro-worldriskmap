@@ -56,10 +56,21 @@ npm run build      # 本番ビルド
 npm run e2e        # Playwright E2E (要: npx playwright install chromium)
 ```
 
-## デプロイ (GitHub Pages)
+## デプロイ (AWS — S3 + CloudFront, CDK)
 
-`main` への push で GitHub Actions が `GITHUB_PAGES=true` でビルドし、Pages へ公開します。
-`vite.config.ts` の `base` はリポジトリ名 `/kiro-worldriskmap/` に設定されます。
+本番は **AWS CDK (TypeScript)** で S3 + CloudFront 構成にデプロイします(詳細は `infra/README.md`)。
+
+```bash
+npm run build            # dist/ を生成 (base は '/')
+cd infra && npm install
+npx cdk deploy --require-approval never
+```
+
+- 非公開 S3 バケット + CloudFront (OAC) + HTTPS 強制 + SPA フォールバック
+- 稼働中の公開 URL: https://d1phbaff9oackz.cloudfront.net
+
+> 補助: `GITHUB_PAGES=true npm run build` でビルドすると `base` が `/kiro-worldriskmap/` になり、
+> `.github/workflows/deploy.yml` 経由で GitHub Pages へも公開できます(Pages 有効化が必要)。
 
 ## Kiro University — 7 レッスンの対応
 
