@@ -33,11 +33,22 @@ keywords:
 低 0–24 / 中 25–49 / 高 50–74 / 深刻 75–100
 
 ## 標準ワークフロー
-1. 対象国の5コンポーネントを公開統計から正規化する。
-2. `compositeRisk` で合成スコアを算出する。
-3. バンド分類を付与する。
-4. 2国間比較では両国の external/conflict を対称に合成し関係係数で調整する。
-5. すべての数値に出典・年次・免責を添える。
+1. **出典の取得・検証(MCP)**: `fetch` MCP サーバで各指標の公開ページ
+   (例: fragilestatesindex.org / matteoiacoviello.com/gpr.htm)を取得し、
+   採用する年次・数値の裏付けを確認する。
+2. **正規化**: 付属 steering `steering/index-normalization.md` の手順で、
+   各指標を 0..100(高いほど高リスク)へ揃える。
+3. **合成スコア算出**: 付属 skill `skills/compute-composite-score.md` に従い
+   `compositeRisk` で合成スコアを算出する。
+4. **バンド分類**を付与する。
+5. **2国間比較**: 両国の external/conflict を対称に合成し関係係数で調整する。
+6. すべての数値に**出典・年次・免責**を添える。
+
+## パッケージ構成
+本 Power は配布可能なパッケージ。詳細は同梱の `README.md` と `manifest.json` を参照。
+- `steering/index-normalization.md` — 指標の正規化手順
+- `skills/compute-composite-score.md` — 合成スコア算出スキル
+- 連携 MCP: `fetch`(出典取得・検証)
 
 ## 検証すべき不変条件
 - スコアは常に 0..100

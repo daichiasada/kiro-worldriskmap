@@ -78,10 +78,10 @@ npx cdk deploy --require-approval never
 |---|---|---|
 | 1 | Spec 駆動開発 | `.kiro/specs/geopolitical-risk-map/`(EARS 記法の requirements/design/tasks) |
 | 2 | Steering | `.kiro/steering/`(要件・規約・ドメイン知識) |
-| 3 | Hooks | `.kiro/hooks/hooks.json`(保存時 lint / domain テスト) |
-| 4 | Property-Based Testing | `src/domain/risk.property.test.ts`(fast-check) |
-| 5 | MCP | `.kiro/settings/mcp.json`(fetch / aws-docs サーバ) |
-| 6 | Powers | `.kiro/powers/geopolitical-risk/power.md`(指標知識とワークフロー) |
+| 3 | Hooks | `.kiro/hooks/hooks.json`(**command型**: 保存時 lint / domain テスト、**agent型**: 不変条件レビュー / Stop時セルフチェック) |
+| 4 | Property-Based Testing | `src/domain/risk.property.test.ts`, `src/domain/relations.property.test.ts`(fast-check) |
+| 5 | MCP | `.kiro/settings/mcp.json`(fetch / aws-docs)+ 実利用ワークフロー `.kiro/steering/mcp-usage.md` |
+| 6 | Powers | `.kiro/powers/geopolitical-risk/`(**配布可能パッケージ**: manifest + power + steering + skill + README) |
 | 7 | Custom Agents | `.kiro/agents/risk-data-reviewer.md`(データ品質レビュー専用) |
 
 ### 開発プロセス(品質保証)

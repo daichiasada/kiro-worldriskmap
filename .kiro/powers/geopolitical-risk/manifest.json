@@ -1,0 +1,26 @@
+{
+  "name": "geopolitical-risk",
+  "version": "1.0.0",
+  "description": "地政学リスクの定量化指標に関する知識と、合成リスクスコア算出・検証のワークフローをパッケージ化した Kiro Power",
+  "author": "daichiasada",
+  "license": "MIT",
+  "keywords": [
+    "地政学",
+    "geopolitical",
+    "risk",
+    "FSI",
+    "GPI",
+    "GPR",
+    "WGI",
+    "fragile states",
+    "composite risk score",
+    "bilateral"
+  ],
+  "entry": "power.md",
+  "steering": ["steering/index-normalization.md"],
+  "skills": ["skills/compute-composite-score.md"],
+  "mcpServers": ["fetch"],
+  "compatibility": {
+    "surfaces": ["ide", "cli", "web"]
+  }
+}

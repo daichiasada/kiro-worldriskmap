@@ -18,6 +18,23 @@
         "type": "command",
         "command": "npm run -s test:run -- src/domain 2>&1 | tail -40"
       }
+    },
+    {
+      "name": "Review domain invariants on save (agent)",
+      "trigger": "PostFileSave",
+      "matcher": "src/domain/.*\\.ts$",
+      "action": {
+        "type": "agent",
+        "prompt": "ドメインロジックが変更されました。次の不変条件が崩れていないか簡潔に確認し、問題があれば指摘してください: (1) 合成スコアは常に 0..100、(2) RISK_WEIGHTS の合計=1.0、(3) バンド境界 25/50/75 の一貫性、(4) 2国間リスクの順序対称性。関連: src/domain/risk.ts, src/domain/constants.ts。"
+      }
+    },
+    {
+      "name": "Pre-commit self-check reminder (agent)",
+      "trigger": "Stop",
+      "action": {
+        "type": "agent",
+        "prompt": "作業を終える前のセルフチェック: `npm run lint` と `npm run test:run` が通ること、変更が spec(.kiro/specs) と整合すること、ユーザー向けに出典・免責が維持されていることを確認してください。未コミットの変更があれば Conventional Commits 形式でのコミットを提案してください。"
+      }
     }
   ]
 }

@@ -9,8 +9,8 @@
     "aws-docs": {
       "command": "uvx",
       "args": ["awslabs.aws-documentation-mcp-server@latest"],
-      "disabled": true,
-      "autoApprove": []
+      "disabled": false,
+      "autoApprove": ["search_documentation", "read_documentation"]
     }
   }
 }
